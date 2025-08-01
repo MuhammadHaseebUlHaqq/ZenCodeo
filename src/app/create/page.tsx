@@ -62,8 +62,8 @@ export default function CreateSnippetPage() {
       if (error) throw error
 
       router.push('/?refresh=true')
-    } catch (error: any) {
-      setError(error.message)
+    } catch (error: unknown) {
+      setError(error instanceof Error ? error.message : 'An error occurred')
     } finally {
       setLoading(false)
     }

@@ -1,6 +1,7 @@
 import { Navigation } from '@/components/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Code, Users, Share2, Sparkles } from 'lucide-react'
+import Link from 'next/link'
 
 export default function AboutPage() {
   return (
@@ -67,7 +68,7 @@ export default function AboutPage() {
                 space where developers can share their knowledge and learn from each other.
               </p>
               <p className="text-muted-foreground">
-                Whether you're a beginner looking to learn from others or an experienced developer wanting to 
+                Whether you&apos;re a beginner looking to learn from others or an experienced developer wanting to 
                 share your expertise, Zencodeo is the place for you. Join our growing community and start 
                 sharing your code today!
               </p>
@@ -79,12 +80,12 @@ export default function AboutPage() {
             <p className="text-muted-foreground mb-6">
               Join thousands of developers who are already sharing and discovering code on Zencodeo
             </p>
-            <a 
+            <Link 
               href="/"
               className="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
             >
               Start Sharing Code
-            </a>
+            </Link>
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback, Suspense } from 'react'
 import { Navigation } from '@/components/navigation'
 import { SnippetCard } from '@/components/snippet-card'
 import { supabase, Snippet } from '@/lib/supabase'
@@ -17,7 +17,7 @@ interface SnippetWithUser extends Snippet {
   user_email?: string
 }
 
-export default function HomePage() {
+function HomePageContent() {
   const { user } = useAuth()
   const searchParams = useSearchParams()
   const [allSnippets, setAllSnippets] = useState<SnippetWithUser[]>([])
@@ -48,7 +48,7 @@ export default function HomePage() {
     }
   }, [searchParams])
 
-  const fetchAllSnippets = async () => {
+  const fetchAllSnippets = useCallback(async () => {
     try {
       // Fetch snippets without joins first
       const { data, error } = await supabase
@@ -74,7 +74,7 @@ export default function HomePage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
 
   const fetchTrendingSnippets = async () => {
     try {
@@ -105,7 +105,7 @@ export default function HomePage() {
     }
   }
 
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
       // Get total likes
       const { count: likesCount } = await supabase
@@ -132,7 +132,7 @@ export default function HomePage() {
       setTotalLikes(0)
       setTotalUsers(0)
     }
-  }
+  }, [])
 
   const filteredSnippets = allSnippets.filter(snippet => {
     const matchesSearch = snippet.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -403,5 +403,25 @@ export default function HomePage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function HomePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex items-center justify-center h-64">
+            <div className="text-center">
+              <Code className="h-8 w-8 animate-spin mx-auto mb-4" />
+              <p>Loading...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    }>
+      <HomePageContent />
+    </Suspense>
   )
 }

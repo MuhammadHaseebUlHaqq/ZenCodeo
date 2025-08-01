@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -15,10 +15,9 @@ interface SnippetWithUser extends Snippet {
 
 interface SnippetCardProps {
   snippet: SnippetWithUser
-  onRefresh?: () => void
 }
 
-export function SnippetCard({ snippet, onRefresh }: SnippetCardProps) {
+export function SnippetCard({ snippet }: SnippetCardProps) {
   const { user } = useAuth()
   const [likesCount, setLikesCount] = useState(snippet.likes_count || 0)
   const [isLiked, setIsLiked] = useState(false)
@@ -27,11 +26,7 @@ export function SnippetCard({ snippet, onRefresh }: SnippetCardProps) {
   
   const isOwnSnippet = user && snippet.user_id === user.id
 
-  useEffect(() => {
-    fetchLikesAndComments()
-  }, [snippet.id])
-
-  const fetchLikesAndComments = async () => {
+  const fetchLikesAndComments = useCallback(async () => {
     try {
       // Fetch likes count
       const { count: likesCount } = await supabase
@@ -62,7 +57,11 @@ export function SnippetCard({ snippet, onRefresh }: SnippetCardProps) {
     } catch (error) {
       console.error('Error fetching likes and comments:', error)
     }
-  }
+  }, [snippet.id, user])
+
+  useEffect(() => {
+    fetchLikesAndComments()
+  }, [fetchLikesAndComments])
 
   const handleLike = async () => {
     if (!user) return

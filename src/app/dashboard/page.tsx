@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Navigation } from '@/components/navigation'
 import { AuthModals } from '@/components/auth-modals'
@@ -15,7 +15,6 @@ import {
   Search, 
   Heart, 
   MessageCircle, 
-  Users, 
   TrendingUp,
   Diamond,
   Music,
@@ -63,22 +62,14 @@ export default function DashboardPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [likedSnippets, setLikedSnippets] = useState<Set<string>>(new Set())
 
-  useEffect(() => {
-    if (!user) {
-      router.push('/')
-      return
-    }
-    fetchDashboardData()
-  }, [user, router])
-
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = useCallback(async () => {
     if (!user) return
     
     try {
       console.log('Fetching dashboard data for user:', user.id)
       
       // First, let's test if we can connect to the database
-      const { data: testData, error: testError } = await supabase
+      const { error: testError } = await supabase
         .from('snippets')
         .select('count')
         .limit(1)
@@ -248,7 +239,15 @@ export default function DashboardPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [user])
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/')
+      return
+    }
+    fetchDashboardData()
+  }, [user, router, fetchDashboardData])
 
   const deleteSnippet = async (snippetId: string) => {
     if (!confirm('Are you sure you want to delete this snippet?')) return

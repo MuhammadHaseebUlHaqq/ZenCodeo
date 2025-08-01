@@ -129,7 +129,7 @@ export function AuthModals({ children }: AuthModalsProps) {
               <div>
                 <h3 className="text-lg font-semibold text-foreground">Check your email</h3>
                 <p className="text-sm text-muted-foreground mt-2">
-                  We've sent a confirmation link to <strong>{signUpEmail}</strong>
+                  We&apos;ve sent a confirmation link to <strong>{signUpEmail}</strong>
                 </p>
               </div>
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">

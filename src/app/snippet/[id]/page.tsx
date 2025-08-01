@@ -16,13 +16,9 @@ import { User, Heart, MessageCircle, ArrowLeft, Copy, Check } from 'lucide-react
 import Link from 'next/link'
 import { AuthModals } from '@/components/auth-modals'
 
-interface SnippetWithUser extends Snippet {
-  // No additional fields needed
-}
+type SnippetWithUser = Snippet
 
-interface CommentWithUser extends Comment {
-  // No additional fields needed
-}
+type CommentWithUser = Comment
 
 export default function SnippetPage() {
   const params = useParams()
@@ -162,8 +158,8 @@ export default function SnippetPage() {
 
       setNewComment('')
       fetchComments()
-    } catch (error: any) {
-      setError(error.message)
+    } catch (error: unknown) {
+      setError(error instanceof Error ? error.message : 'An error occurred')
     } finally {
       setCommentLoading(false)
     }

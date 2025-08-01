@@ -13,9 +13,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { useAuth } from '@/lib/auth'
 import { ArrowLeft, Save, Loader2 } from 'lucide-react'
 
-interface SnippetWithUser extends Snippet {
-  // No additional fields needed
-}
+type SnippetWithUser = Snippet
 
 export default function EditSnippetPage() {
   const params = useParams()
@@ -95,9 +93,9 @@ export default function EditSnippetPage() {
       setTimeout(() => {
         router.push(`/snippet/${snippet.id}`)
       }, 1500)
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error updating snippet:', error)
-      setError(error.message || 'Failed to update snippet')
+      setError(error instanceof Error ? error.message : 'Failed to update snippet')
     } finally {
       setSaving(false)
     }

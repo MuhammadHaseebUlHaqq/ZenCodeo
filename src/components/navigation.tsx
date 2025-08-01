@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu'
-import { Code, User, LogOut, Home, Plus, Settings, BookOpen } from 'lucide-react'
+import { Code, User, LogOut, Home, Plus, BookOpen } from 'lucide-react'
 import { ThemeToggle } from '@/components/theme-toggle'
 
 export function Navigation() {
